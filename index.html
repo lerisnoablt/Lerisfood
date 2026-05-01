@@ -1,74 +1,1389 @@
-<!DOCTYPE html><html lang="fr">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lerisfood</title>
+  <meta name="theme-color" content="#ff7a18" />
+
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:Arial,sans-serif;background:#fff7ef;color:#271b14;min-height:100vh}
-    header{max-width:1000px;margin:14px auto;padding:12px;background:white;border-radius:20px;display:flex;justify-content:space-between;gap:10px;align-items:center;box-shadow:0 8px 24px #0001;position:sticky;top:10px;z-index:10}
-    .brand{font-size:22px;font-weight:900;color:#d85a00}
-    nav{display:flex;gap:8px;flex-wrap:wrap}
-    button{border:0;border-radius:12px;padding:10px 13px;background:#ff7a18;color:white;font-weight:900;cursor:pointer}
-    nav button{background:#fff0df;color:#d85a00}
-    main{max-width:1000px;margin:auto;padding:14px}
-    .page{display:none}.page.active{display:block}
-    .hero{background:linear-gradient(135deg,#321c10,#ff7a18);color:white;border-radius:28px;padding:32px;box-shadow:0 14px 34px #0002}
-    h1{font-size:clamp(36px,7vw,66px);line-height:.95;margin-bottom:14px}
-    h2{font-size:32px;margin:22px 0 14px;color:#321c10}
-    .box,.product,.cart-card,.order{background:white;border-radius:20px;padding:16px;margin-top:14px;box-shadow:0 8px 22px #0001}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-    .product-img{height:145px;background:#fff0df;border-radius:16px;display:grid;place-items:center;font-size:68px;margin-bottom:10px;position:relative}
-    .badge{position:absolute;top:9px;left:9px;background:white;color:#d85a00;padding:6px 9px;border-radius:999px;font-size:12px;font-weight:900}
-    .price{font-size:20px;font-weight:900;color:#d85a00}
-    .row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px}
-    .toolbar{display:grid;grid-template-columns:1fr auto;gap:10px;background:white;border-radius:18px;padding:12px;margin-bottom:14px}
-    input,select,textarea{width:100%;border:1px solid #f0ded1;border-radius:12px;padding:11px}
-    form{display:grid;gap:12px}.hidden{display:none!important}
-    .checks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.checks label{background:#fff7ef;border-radius:12px;padding:10px}
-    .cart-line{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;border-bottom:1px solid #f0ded1;padding:10px 0}
-    .qty{display:flex;gap:8px;align-items:center}.qty button{background:#fff0df;color:#d85a00;width:30px;height:30px;padding:0}
-    .total{font-size:22px;font-weight:900;color:#d85a00;background:#fff7ef;border-radius:14px;padding:12px;margin-top:12px;display:flex;justify-content:space-between}
-    .danger{background:#d93636}.green{background:#14a765}.dark{background:#321c10}
-    .status{display:inline-block;border-radius:999px;padding:6px 9px;background:#ffe5c9;color:#9e4200;font-weight:900;font-size:12px}.ready{background:#defdea;color:#087638}.done{background:#eee;color:#555}
-    #toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-70px);background:#321c10;color:white;padding:12px 15px;border-radius:14px;font-weight:900;transition:.25s;z-index:99}#toast.show{transform:translateX(-50%) translateY(0)}
-    @media(max-width:750px){header{flex-direction:column;align-items:flex-start}.grid{grid-template-columns:1fr 1fr}.toolbar{grid-template-columns:1fr}.checks{grid-template-columns:1fr}}
-    @media(max-width:520px){.grid{grid-template-columns:1fr}.cart-line{grid-template-columns:1fr}.hero{padding:22px}}
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --orange: #ff7a18;
+      --orange-dark: #d85a00;
+      --cream: #fff7ef;
+      --cream-2: #fff0df;
+      --dark: #2b170c;
+      --text: #2e1d13;
+      --muted: #75655a;
+      --white: #ffffff;
+      --border: #f1ded0;
+      --green: #14a765;
+      --red: #d93636;
+      --shadow: 0 18px 45px rgba(60, 28, 10, 0.12);
+      --radius: 26px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(255, 122, 24, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(255, 196, 87, 0.25), transparent 24%),
+        linear-gradient(180deg, #fff8f1, #fffdfb 45%, #fff6ef);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      transition: 0.18s transform, 0.18s opacity, 0.18s background;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    header {
+      max-width: 1180px;
+      margin: 14px auto;
+      padding: 12px 14px;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: 10px;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 23px;
+      font-weight: 900;
+      color: var(--orange-dark);
+      letter-spacing: -0.5px;
+    }
+
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--orange), #ffbd59);
+      color: white;
+      font-size: 23px;
+      box-shadow: 0 10px 22px rgba(255, 122, 24, 0.35);
+    }
+
+    nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    nav button,
+    .btn {
+      border-radius: 15px;
+      padding: 11px 14px;
+      background: var(--orange);
+      color: white;
+      font-weight: 900;
+    }
+
+    nav button {
+      background: #fff0df;
+      color: var(--orange-dark);
+    }
+
+    nav button.active {
+      background: var(--orange);
+      color: white;
+      box-shadow: 0 8px 18px rgba(255, 122, 24, 0.28);
+    }
+
+    .btn-dark {
+      background: var(--dark);
+      color: white;
+    }
+
+    .btn-light {
+      background: #fff0df;
+      color: var(--orange-dark);
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: white;
+    }
+
+    .btn-red {
+      background: var(--red);
+      color: white;
+    }
+
+    .btn-white {
+      background: white;
+      color: var(--orange-dark);
+    }
+
+    main {
+      max-width: 1180px;
+      margin: auto;
+      padding: 16px;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+      padding: 36px;
+      border-radius: 34px;
+      color: white;
+      background:
+        linear-gradient(135deg, rgba(43, 23, 12, 0.98), rgba(255, 122, 24, 0.82));
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      top: -70px;
+      right: -80px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 210px;
+      height: 210px;
+      border-radius: 999px;
+      background: rgba(255, 213, 120, 0.22);
+      bottom: -80px;
+      left: -70px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.15);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 900;
+      margin-bottom: 15px;
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: 0.93;
+      margin-bottom: 18px;
+      letter-spacing: -2.2px;
+      max-width: 650px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      line-height: 1.55;
+      max-width: 620px;
+      opacity: 0.96;
+      margin-bottom: 22px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .hero-panel {
+      position: relative;
+      z-index: 2;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 30px;
+      padding: 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .showcase-item {
+      min-height: 126px;
+      background: white;
+      color: var(--text);
+      padding: 15px;
+      border-radius: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .showcase-item .emoji {
+      font-size: 46px;
+    }
+
+    .showcase-item strong {
+      font-size: 16px;
+    }
+
+    .showcase-item small {
+      color: var(--muted);
+    }
+
+    .section-title {
+      margin: 30px 0 16px;
+    }
+
+    .section-title h2 {
+      font-size: 35px;
+      color: var(--dark);
+      margin-bottom: 6px;
+      letter-spacing: -0.6px;
+    }
+
+    .section-title p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .cards-3,
+    .category-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .info-card,
+    .category-card,
+    .product,
+    .box,
+    .cart-card,
+    .order {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.05);
+    }
+
+    .info-card,
+    .category-card {
+      padding: 18px;
+    }
+
+    .info-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: #fff0df;
+      color: var(--orange-dark);
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .info-card h3,
+    .category-card h3 {
+      margin-bottom: 8px;
+    }
+
+    .info-card p,
+    .category-card p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .category-card {
+      min-height: 160px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, white, #fff2e5);
+    }
+
+    .category-card::after {
+      content: "";
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      border-radius: 999px;
+      right: -35px;
+      bottom: -35px;
+      background: rgba(255, 122, 24, 0.08);
+    }
+
+    .category-card .big {
+      font-size: 52px;
+      margin-bottom: 10px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      padding: 12px;
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 12px 13px;
+      outline: none;
+      background: white;
+      color: var(--text);
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #ffb276;
+      box-shadow: 0 0 0 4px rgba(255, 122, 24, 0.12);
+    }
+
+    .chips {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .chip {
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--orange-dark);
+      border-radius: 999px;
+      padding: 10px 13px;
+      font-weight: 900;
+    }
+
+    .chip.active {
+      background: var(--orange);
+      color: white;
+      border-color: var(--orange);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .product {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .product-img {
+      height: 185px;
+      position: relative;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #fff7ef, #fff1e0);
+      overflow: hidden;
+    }
+
+    .product-img::after {
+      content: "";
+      position: absolute;
+      width: 185px;
+      height: 185px;
+      border-radius: 999px;
+      background: rgba(255, 122, 24, 0.09);
+      right: -30px;
+      bottom: -40px;
+    }
+
+    .product-emoji {
+      position: relative;
+      z-index: 2;
+      font-size: 84px;
+      filter: drop-shadow(0 12px 16px rgba(0, 0, 0, 0.13));
+    }
+
+    .badge {
+      position: absolute;
+      z-index: 3;
+      top: 12px;
+      left: 12px;
+      background: white;
+      color: var(--orange-dark);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .product-content {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .product-content h3 {
+      font-size: 21px;
+    }
+
+    .product-content p {
+      color: var(--muted);
+      line-height: 1.5;
+      min-height: 46px;
+    }
+
+    .tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      font-size: 12px;
+      font-weight: 900;
+      color: #875a3a;
+      background: #fff3e6;
+      padding: 7px 9px;
+      border-radius: 999px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-top: auto;
+    }
+
+    .price {
+      font-size: 22px;
+      font-weight: 900;
+      color: var(--orange-dark);
+    }
+
+    .box,
+    .cart-card,
+    .order {
+      padding: 18px;
+      margin-top: 14px;
+    }
+
+    .cart-line {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 10px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+
+    .cart-line:last-child {
+      border-bottom: 0;
+    }
+
+    .qty {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .qty button {
+      background: #fff0df;
+      color: var(--orange-dark);
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      border-radius: 10px;
+    }
+
+    .summary {
+      margin-top: 14px;
+      background: linear-gradient(135deg, #fff8f1, #fff0e0);
+      border: 1px solid #f4dfcb;
+      border-radius: 18px;
+      padding: 14px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .summary-row.total {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--orange-dark);
+    }
+
+    .form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .label {
+      font-weight: 900;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .checks {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .checks label {
+      background: #fff7ef;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-weight: 700;
+    }
+
+    .checks input {
+      width: auto;
+    }
+
+    .note-box {
+      padding: 12px 14px;
+      background: #fff7ef;
+      border: 1px dashed #efceb3;
+      border-radius: 16px;
+      color: #725f52;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+
+    .order-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .status {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 7px 11px;
+      background: #ffe5c9;
+      color: #9e4200;
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    .ready {
+      background: #defdea;
+      color: #087638;
+    }
+
+    .done {
+      background: #ececec;
+      color: #575757;
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--muted);
+      padding: 28px;
+      background: white;
+      border: 1px dashed var(--border);
+      border-radius: 22px;
+      margin-top: 14px;
+    }
+
+    #toast {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: var(--dark);
+      color: white;
+      padding: 12px 15px;
+      border-radius: 14px;
+      font-weight: 900;
+      transition: 0.25s;
+      z-index: 999;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.16);
+    }
+
+    #toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .footer-note {
+      text-align: center;
+      color: var(--muted);
+      font-size: 14px;
+      margin: 26px 0 12px;
+    }
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .cards-3,
+      .category-row,
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .cards-3,
+      .category-row,
+      .grid,
+      .checks {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-line {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding: 24px;
+      }
+
+      .hero-panel {
+        display: none;
+      }
+
+      .section-title h2 {
+        font-size: 28px;
+      }
+    }
   </style>
 </head>
+
 <body>
-<header>
-  <div class="brand">🍽️ Lerisfood</div>
-  <nav>
-    <button onclick="showPage('home')">Accueil</button>
-    <button onclick="showPage('menu')">Menu</button>
-    <button onclick="showPage('cart')">Panier <span id="cartCount">0</span></button>
-    <button onclick="showPage('admin')">Admin</button>
-  </nav>
-</header>
-<main>
-  <section id="home" class="page active">
-    <div class="hero"><h1>Commandez vos douceurs en ligne.</h1><p>Milkshakes, caipiriñas et crêpes. Paiement sur place.</p><br><button onclick="showPage('menu')">Voir le menu</button></div>
-    <div class="box"><h2>GitHub Pages</h2><p>Un seul fichier index.html. Pas besoin de télécharger d’autres fichiers.</p></div>
-  </section>
-  <section id="menu" class="page"><h2>Menu</h2><div class="toolbar"><input id="search" placeholder="Rechercher..." oninput="renderProducts()"><select id="category" onchange="renderProducts()"><option value="all">Tout</option><option>Milkshakes</option><option>Caipiriñas</option><option>Crêpes</option></select></div><div id="products" class="grid"></div></section>
-  <section id="cart" class="page"><h2>Panier</h2><div id="cartItems"></div><form id="orderForm" class="box"><h3>Finaliser la commande</h3><input id="clientName" required placeholder="Nom du client"><input id="clientPhone" placeholder="Téléphone optionnel"><div class="checks"><label><input type="checkbox" value="Algérienne"> Algérienne</label><label><input type="checkbox" value="Ketchup"> Ketchup</label><label><input type="checkbox" value="Samouraï"> Samouraï</label></div><textarea id="note" placeholder="Note..."></textarea><button type="submit">Valider la commande</button></form></section>
-  <section id="admin" class="page"><h2>Admin</h2><div id="loginBox" class="box"><input id="adminCode" type="password" placeholder="Code : 1234"><br><br><button class="dark" onclick="unlockAdmin()">Entrer</button></div><div id="adminPanel" class="hidden"><button class="dark" onclick="exportOrders()">Exporter CSV</button> <button class="danger" onclick="clearOrders()">Effacer</button> <button onclick="lockAdmin()">Verrouiller</button><div id="orders"></div></div></section>
-  <section id="thanks" class="page"><div class="box"><h2>✅ Commande validée !</h2><p>Paiement sur place au comptoir.</p><br><button onclick="showPage('menu')">Nouvelle commande</button></div></section>
-</main>
-<div id="toast"></div>
-<script>
-const ADMIN_PIN='1234';
-const products=[['milkshake-fraise','Milkshake Fraise','Milkshakes',4,'🍓'],['milkshake-chocolat','Milkshake Chocolat','Milkshakes',4,'🍫'],['milkshake-oreo','Milkshake Oreo','Milkshakes',4.5,'🍪'],['milkshake-caramel','Milkshake Caramel','Milkshakes',4.5,'🍯'],['caipirinha-fraise','Caipiriña Fraise','Caipiriñas',3.5,'🍓'],['caipirinha-citron','Caipiriña Citron','Caipiriñas',3.5,'🍋'],['caipirinha-gingembre','Caipiriña Gingembre','Caipiriñas',3.5,'🫚'],['caipirinha-maracuja','Caipiriña Maracujá','Caipiriñas',3.5,'🥭'],['crepe-confiture','Crêpe Confiture','Crêpes',2.5,'🍓'],['crepe-nutella','Crêpe Nutella','Crêpes',3,'🍫'],['crepe-jambon-fromage','Crêpe Jambon Fromage','Crêpes',4,'🧀'],['crepe-saucisse','Crêpe Saucisse','Crêpes',4,'🌭']].map(p=>({id:p[0],name:p[1],category:p[2],price:p[3],emoji:p[4]}));
-let cart=JSON.parse(localStorage.getItem('lerisfood_cart')||'[]'),orders=JSON.parse(localStorage.getItem('lerisfood_orders')||'[]'),adminUnlocked=sessionStorage.getItem('lerisfood_admin')==='yes';
-function money(n){return Number(n).toFixed(2).replace('.',',')+' €'}function save(){localStorage.setItem('lerisfood_cart',JSON.stringify(cart));localStorage.setItem('lerisfood_orders',JSON.stringify(orders))}function toast(m){let t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1600)}function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');if(id==='menu')renderProducts();if(id==='cart')renderCart();if(id==='admin')renderAdmin();scrollTo({top:0,behavior:'smooth'})}
-function renderProducts(){let q=document.getElementById('search').value.toLowerCase(),c=document.getElementById('category').value,list=products.filter(p=>(c==='all'||p.category===c)&&(p.name+' '+p.category).toLowerCase().includes(q));document.getElementById('products').innerHTML=list.map(p=>`<article class="product"><div class="product-img"><span class="badge">${p.category}</span>${p.emoji}</div><h3>${p.name}</h3><p>Paiement sur place</p><div class="row"><span class="price">${money(p.price)}</span><button onclick="addToCart('${p.id}')">Ajouter</button></div></article>`).join('')||'<div class="box">Aucun produit trouvé.</div>'}
-function addToCart(id){let p=products.find(x=>x.id===id),it=cart.find(x=>x.id===id);it?it.qty++:cart.push({id:p.id,name:p.name,price:p.price,qty:1});save();updateCount();toast(p.name+' ajouté')}function changeQty(id,d){let it=cart.find(x=>x.id===id);if(!it)return;it.qty+=d;if(it.qty<=0)cart=cart.filter(x=>x.id!==id);save();updateCount();renderCart()}function total(){return cart.reduce((s,i)=>s+i.price*i.qty,0)}function updateCount(){document.getElementById('cartCount').textContent=cart.reduce((s,i)=>s+i.qty,0)}
-function renderCart(){let box=document.getElementById('cartItems'),form=document.getElementById('orderForm');if(!cart.length){box.innerHTML='<div class="box">Panier vide.</div>';form.classList.add('hidden');return}form.classList.remove('hidden');box.innerHTML=`<div class="cart-card">${cart.map(i=>`<div class="cart-line"><div><b>${i.name}</b><br>${money(i.price)} x ${i.qty}</div><div class="qty"><button onclick="changeQty('${i.id}',-1)">-</button><b>${i.qty}</b><button onclick="changeQty('${i.id}',1)">+</button></div><b>${money(i.price*i.qty)}</b></div>`).join('')}<div class="total"><span>Total</span><b>${money(total())}</b></div></div>`}
-document.getElementById('orderForm').addEventListener('submit',e=>{e.preventDefault();let name=document.getElementById('clientName').value.trim();if(!name)return toast('Ajoute le nom');let sauces=[...document.querySelectorAll('.checks input:checked')].map(i=>i.value);orders.unshift({id:Date.now(),number:orders.length+1,date:new Date().toLocaleString('fr-FR'),name,phone:clientPhone.value,note:note.value,sauces,items:cart.map(i=>({...i})),total:total(),status:'À préparer'});cart=[];save();updateCount();e.target.reset();showPage('thanks')});
-function unlockAdmin(){if(adminCode.value.trim()!==ADMIN_PIN)return toast('Code incorrect');adminUnlocked=true;sessionStorage.setItem('lerisfood_admin','yes');renderAdmin()}function lockAdmin(){adminUnlocked=false;sessionStorage.removeItem('lerisfood_admin');renderAdmin()}function renderAdmin(){loginBox.classList.toggle('hidden',adminUnlocked);adminPanel.classList.toggle('hidden',!adminUnlocked);if(!adminUnlocked)return;orders.innerHTML=orders.length?orders.map(o=>`<article class="order"><div><b>Commande #${o.number}</b> <span class="status ${o.status==='Prêt'?'ready':o.status==='Terminé'?'done':''}">${o.status}</span><br><small>${o.date}</small></div><div><b>${o.name}</b> ${o.phone||''}</div><div>${o.items.map(i=>`${i.qty}x ${i.name} — ${money(i.price*i.qty)}`).join('<br>')}<br><b>Total : ${money(o.total)}</b>${o.sauces.length?'<br>🌶️ '+o.sauces.join(', '):''}${o.note?'<br>📝 '+o.note:''}</div><div class="order-actions"><button onclick="setStatus(${o.id},'À préparer')">À préparer</button><button class="green" onclick="setStatus(${o.id},'Prêt')">Prêt</button><button class="dark" onclick="setStatus(${o.id},'Terminé')">Terminé</button><button class="danger" onclick="deleteOrder(${o.id})">Supprimer</button></div></article>`).join(''):'<div class="box">Aucune commande.</div>'}
-function setStatus(id,s){let o=orders.find(x=>x.id===id);if(o){o.status=s;save();renderAdmin()}}function deleteOrder(id){if(confirm('Supprimer ?')){orders=orders.filter(x=>x.id!==id);save();renderAdmin()}}function clearOrders(){if(confirm('Effacer toutes les commandes ?')){orders=[];save();renderAdmin()}}function exportOrders(){let rows=[['Numero','Date','Client','Produits','Total','Statut']];orders.forEach(o=>rows.push([o.number,o.date,o.name,o.items.map(i=>`${i.qty}x ${i.name}`).join(' | '),money(o.total),o.status]));let csv=rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(';')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));a.download='commandes_lerisfood.csv';a.click()}
-renderProducts();renderCart();renderAdmin();updateCount();
-</script>
+  <header>
+    <div class="brand">
+      <div class="brand-badge">🍽️</div>
+      <div>Lerisfood</div>
+    </div>
+
+    <nav>
+      <button id="nav-home" onclick="showPage('home')">Accueil</button>
+      <button id="nav-menu" onclick="showPage('menu')">Menu</button>
+      <button id="nav-cart" onclick="showPage('cart')">Panier <span id="cartCount">0</span></button>
+      <button id="nav-admin" onclick="showPage('admin')">Admin</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="home" class="page active">
+      <div class="hero">
+        <div class="hero-content">
+          <div class="eyebrow">🔥 Commande rapide • Paiement sur place</div>
+          <h1>Commandez vos douceurs en ligne.</h1>
+          <p>
+            Milkshakes, caipiriñas, crêpes sucrées et crêpes salées.
+            Le client choisit son menu, valide sa commande et tu la retrouves
+            dans ton espace admin.
+          </p>
+
+          <div class="hero-actions">
+            <button onclick="showPage('menu')">Voir le menu</button>
+            <button class="btn-light" onclick="showPage('admin')">Voir les commandes</button>
+          </div>
+        </div>
+
+        <div class="hero-panel">
+          <div class="showcase-grid">
+            <div class="showcase-item">
+              <div class="emoji">🥤</div>
+              <strong>Milkshakes</strong>
+              <small>Onctueux et gourmands</small>
+            </div>
+
+            <div class="showcase-item">
+              <div class="emoji">🍹</div>
+              <strong>Caipiriñas</strong>
+              <small>Fraîches et fruitées</small>
+            </div>
+
+            <div class="showcase-item">
+              <div class="emoji">🥞</div>
+              <strong>Crêpes sucrées</strong>
+              <small>Classiques et gourmandes</small>
+            </div>
+
+            <div class="showcase-item">
+              <div class="emoji">🧀</div>
+              <strong>Crêpes salées</strong>
+              <small>Avec sauces en option</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Comment ça marche ?</h2>
+        <p>Simple pour le client, pratique pour toi.</p>
+      </div>
+
+      <div class="cards-3">
+        <div class="info-card">
+          <div class="info-icon">📲</div>
+          <h3>1. Le client choisit</h3>
+          <p>Il ouvre le menu, regarde les produits et ajoute ce qu’il veut au panier.</p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">🛒</div>
+          <h3>2. Il valide</h3>
+          <p>
+            Il entre son nom, laisse une note si besoin et sélectionne les sauces
+            uniquement si des crêpes salées sont dans la commande.
+          </p>
+        </div>
+
+        <div class="info-card">
+          <div class="info-icon">👨‍🍳</div>
+          <h3>3. Tu prépares</h3>
+          <p>
+            Tu vois la commande dans l’espace admin et tu peux la passer à
+            “À préparer”, “Prêt” ou “Terminé”.
+          </p>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Nos catégories</h2>
+        <p>Un menu plus riche, plus visuel, plus attractif.</p>
+      </div>
+
+      <div class="category-row">
+        <div class="category-card">
+          <div class="big">🥤</div>
+          <h3>Milkshakes</h3>
+          <p>Fraise, chocolat, Oreo, caramel, vanille, spéculoos et banane.</p>
+        </div>
+
+        <div class="category-card">
+          <div class="big">🍹</div>
+          <h3>Caipiriñas</h3>
+          <p>Fraise, citron, gingembre, maracujá, mangue et fruits rouges.</p>
+        </div>
+
+        <div class="category-card">
+          <div class="big">🥞</div>
+          <h3>Crêpes</h3>
+          <p>Sucrées et salées, avec sauces uniquement pour les versions salées.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="menu" class="page">
+      <div class="section-title">
+        <h2>Le menu</h2>
+        <p>Choisis tes produits, filtre par catégorie et compose ta commande.</p>
+      </div>
+
+      <div class="toolbar">
+        <input id="search" placeholder="Rechercher un produit..." oninput="renderProducts()" />
+
+        <select id="category" onchange="renderProducts()">
+          <option value="all">Toutes les catégories</option>
+          <option value="Milkshakes">Milkshakes</option>
+          <option value="Caipiriñas">Caipiriñas</option>
+          <option value="Crêpes sucrées">Crêpes sucrées</option>
+          <option value="Crêpes salées">Crêpes salées</option>
+        </select>
+
+        <select id="sort" onchange="renderProducts()">
+          <option value="default">Tri normal</option>
+          <option value="priceAsc">Prix croissant</option>
+          <option value="priceDesc">Prix décroissant</option>
+          <option value="nameAsc">Nom A-Z</option>
+        </select>
+      </div>
+
+      <div class="chips">
+        <button class="chip active" onclick="setChip('all', this)">Tout</button>
+        <button class="chip" onclick="setChip('Milkshakes', this)">🥤 Milkshakes</button>
+        <button class="chip" onclick="setChip('Caipiriñas', this)">🍹 Caipiriñas</button>
+        <button class="chip" onclick="setChip('Crêpes sucrées', this)">🍫 Crêpes sucrées</button>
+        <button class="chip" onclick="setChip('Crêpes salées', this)">🧀 Crêpes salées</button>
+      </div>
+
+      <div id="products" class="grid"></div>
+    </section>
+
+    <section id="cart" class="page">
+      <div class="section-title">
+        <h2>Ton panier</h2>
+        <p>Vérifie ta commande avant de valider.</p>
+      </div>
+
+      <div id="cartItems"></div>
+
+      <form id="orderForm" class="box form">
+        <h3>Finaliser la commande</h3>
+
+        <div class="label">Nom du client *</div>
+        <input id="clientName" required placeholder="Ex : Lerisno" />
+
+        <div class="label">Téléphone, optionnel</div>
+        <input id="clientPhone" placeholder="Ex : 0694 00 00 00" />
+
+        <div id="saucesBlock" class="hidden">
+          <div class="label">Sauces pour les crêpes salées</div>
+          <div class="hint">
+            Les sauces ne s’appliquent qu’aux crêpes salées présentes dans le panier.
+          </div>
+
+          <div class="checks" style="margin-top: 10px;">
+            <label><input type="checkbox" value="Algérienne" /> Algérienne</label>
+            <label><input type="checkbox" value="Ketchup" /> Ketchup</label>
+            <label><input type="checkbox" value="Samouraï" /> Samouraï</label>
+          </div>
+        </div>
+
+        <div class="label">Note</div>
+        <textarea id="note" placeholder="Ex : sauce à part, sans glaçons, bien chaud..."></textarea>
+
+        <div class="note-box">
+          💳 Paiement sur place uniquement.
+        </div>
+
+        <button type="submit">Valider la commande</button>
+      </form>
+    </section>
+
+    <section id="admin" class="page">
+      <div class="section-title">
+        <h2>Espace admin</h2>
+        <p>Code admin : <strong>1234</strong></p>
+      </div>
+
+      <div id="loginBox" class="box">
+        <div class="form">
+          <div class="label">Code admin</div>
+          <input id="adminCode" type="password" placeholder="Entre le code" />
+          <button class="btn-dark" onclick="unlockAdmin()">Entrer</button>
+        </div>
+      </div>
+
+      <div id="adminPanel" class="hidden">
+        <div class="box">
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <button class="btn-dark" onclick="exportOrders()">Exporter CSV</button>
+            <button class="btn-red" onclick="clearOrders()">Effacer toutes les commandes</button>
+            <button class="btn-light" onclick="lockAdmin()">Verrouiller</button>
+          </div>
+        </div>
+
+        <div id="orders"></div>
+      </div>
+    </section>
+
+    <section id="thanks" class="page">
+      <div class="box">
+        <h2>✅ Commande validée !</h2>
+        <p style="color: var(--muted); line-height: 1.5;">
+          Merci pour votre commande. Paiement sur place au comptoir.
+        </p>
+
+        <div style="margin-top: 16px;">
+          <button onclick="showPage('menu')">Nouvelle commande</button>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer-note">
+      Lerisfood • Version GitHub Pages • Données stockées localement dans le navigateur
+    </div>
+  </main>
+
+  <div id="toast"></div>
+
+  <script>
+    const ADMIN_PIN = "1234";
+
+    const products = [
+      { id: "milkshake-fraise", name: "Milkshake Fraise", category: "Milkshakes", price: 4.00, emoji: "🍓", tags: ["Fruité", "Frais"], savory: false },
+      { id: "milkshake-chocolat", name: "Milkshake Chocolat", category: "Milkshakes", price: 4.00, emoji: "🍫", tags: ["Classique", "Gourmand"], savory: false },
+      { id: "milkshake-oreo", name: "Milkshake Oreo", category: "Milkshakes", price: 4.50, emoji: "🍪", tags: ["Best-seller", "Crémeux"], savory: false },
+      { id: "milkshake-caramel", name: "Milkshake Caramel", category: "Milkshakes", price: 4.50, emoji: "🍯", tags: ["Doux", "Sucré"], savory: false },
+      { id: "milkshake-vanille", name: "Milkshake Vanille", category: "Milkshakes", price: 4.00, emoji: "🍦", tags: ["Onctueux", "Doux"], savory: false },
+      { id: "milkshake-speculoos", name: "Milkshake Spéculoos", category: "Milkshakes", price: 4.80, emoji: "🧇", tags: ["Original", "Épicé"], savory: false },
+      { id: "milkshake-banane", name: "Milkshake Banane", category: "Milkshakes", price: 4.20, emoji: "🍌", tags: ["Fruité", "Crémeux"], savory: false },
+
+      { id: "caipi-fraise", name: "Caipiriña Fraise", category: "Caipiriñas", price: 3.50, emoji: "🍓", tags: ["Frais", "Fruité"], savory: false },
+      { id: "caipi-citron", name: "Caipiriña Citron", category: "Caipiriñas", price: 3.50, emoji: "🍋", tags: ["Acidulé", "Frais"], savory: false },
+      { id: "caipi-gingembre", name: "Caipiriña Gingembre", category: "Caipiriñas", price: 3.50, emoji: "🫚", tags: ["Épicé", "Original"], savory: false },
+      { id: "caipi-maracuja", name: "Caipiriña Maracujá", category: "Caipiriñas", price: 3.50, emoji: "🥭", tags: ["Tropical", "Frais"], savory: false },
+      { id: "caipi-mangue", name: "Caipiriña Mangue", category: "Caipiriñas", price: 3.80, emoji: "🥭", tags: ["Douce", "Tropicale"], savory: false },
+      { id: "caipi-fruits-rouges", name: "Caipiriña Fruits Rouges", category: "Caipiriñas", price: 3.80, emoji: "🍒", tags: ["Fruité", "Populaire"], savory: false },
+
+      { id: "crepe-confiture", name: "Crêpe Confiture", category: "Crêpes sucrées", price: 2.50, emoji: "🍓", tags: ["Sucrée", "Simple"], savory: false },
+      { id: "crepe-nutella", name: "Crêpe Nutella", category: "Crêpes sucrées", price: 3.00, emoji: "🍫", tags: ["Best-seller", "Gourmande"], savory: false },
+      { id: "crepe-sucre", name: "Crêpe Sucre", category: "Crêpes sucrées", price: 2.20, emoji: "🍬", tags: ["Classique", "Légère"], savory: false },
+      { id: "crepe-miel", name: "Crêpe Miel", category: "Crêpes sucrées", price: 2.80, emoji: "🍯", tags: ["Douce", "Fondante"], savory: false },
+      { id: "crepe-banane-choco", name: "Crêpe Banane Choco", category: "Crêpes sucrées", price: 3.80, emoji: "🍌", tags: ["Gourmande", "Fruité"], savory: false },
+      { id: "crepe-oreo", name: "Crêpe Oreo", category: "Crêpes sucrées", price: 3.80, emoji: "🍪", tags: ["Originale", "Gourmande"], savory: false },
+
+      { id: "crepe-jambon-fromage", name: "Crêpe Jambon Fromage", category: "Crêpes salées", price: 4.00, emoji: "🧀", tags: ["Salée", "Sauce possible"], savory: true },
+      { id: "crepe-saucisse", name: "Crêpe Saucisse", category: "Crêpes salées", price: 4.00, emoji: "🌭", tags: ["Salée", "Sauce possible"], savory: true },
+      { id: "crepe-thon-fromage", name: "Crêpe Thon Fromage", category: "Crêpes salées", price: 4.30, emoji: "🐟", tags: ["Salée", "Généreuse"], savory: true },
+      { id: "crepe-poulet-fromage", name: "Crêpe Poulet Fromage", category: "Crêpes salées", price: 4.80, emoji: "🍗", tags: ["Salée", "Copieuse"], savory: true },
+      { id: "crepe-oeuf-fromage", name: "Crêpe Œuf Fromage", category: "Crêpes salées", price: 4.20, emoji: "🥚", tags: ["Salée", "Moelleuse"], savory: true }
+    ];
+
+    let cart = JSON.parse(localStorage.getItem("lerisfood_cart") || "[]");
+    let ordersData = JSON.parse(localStorage.getItem("lerisfood_orders") || "[]");
+    let adminUnlocked = sessionStorage.getItem("lerisfood_admin") === "yes";
+
+    function money(n) {
+      return Number(n).toFixed(2).replace(".", ",") + " €";
+    }
+
+    function save() {
+      localStorage.setItem("lerisfood_cart", JSON.stringify(cart));
+      localStorage.setItem("lerisfood_orders", JSON.stringify(ordersData));
+    }
+
+    function toast(message) {
+      const t = document.getElementById("toast");
+      t.textContent = message;
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 1700);
+    }
+
+    function updateNav(page) {
+      ["home", "menu", "cart", "admin"].forEach(id => {
+        const el = document.getElementById("nav-" + id);
+        if (el) el.classList.toggle("active", page === id);
+      });
+    }
+
+    function showPage(id) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      document.getElementById(id).classList.add("active");
+
+      updateNav(id);
+
+      if (id === "menu") renderProducts();
+      if (id === "cart") renderCart();
+      if (id === "admin") renderAdmin();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function setChip(category, btn) {
+      document.getElementById("category").value = category;
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      btn.classList.add("active");
+      renderProducts();
+    }
+
+    function renderProducts() {
+      const q = document.getElementById("search").value.toLowerCase().trim();
+      const cat = document.getElementById("category").value;
+      const sort = document.getElementById("sort").value;
+
+      let list = [...products];
+
+      if (cat !== "all") {
+        list = list.filter(p => p.category === cat);
+      }
+
+      if (q) {
+        list = list.filter(p =>
+          (p.name + " " + p.category + " " + p.tags.join(" ")).toLowerCase().includes(q)
+        );
+      }
+
+      if (sort === "priceAsc") list.sort((a, b) => a.price - b.price);
+      if (sort === "priceDesc") list.sort((a, b) => b.price - a.price);
+      if (sort === "nameAsc") list.sort((a, b) => a.name.localeCompare(b.name));
+
+      document.getElementById("products").innerHTML = list.map(p => `
+        <article class="product">
+          <div class="product-img">
+            <span class="badge">${p.category}</span>
+            <div class="product-emoji">${p.emoji}</div>
+          </div>
+
+          <div class="product-content">
+            <h3>${p.name}</h3>
+            <p>${p.savory ? "Crêpe salée avec possibilité de sauces." : "Délicieux produit préparé avec soin."}</p>
+
+            <div class="tags">
+              ${p.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}
+            </div>
+
+            <div class="row">
+              <span class="price">${money(p.price)}</span>
+              <button onclick="addToCart('${p.id}')">Ajouter</button>
+            </div>
+          </div>
+        </article>
+      `).join("") || `<div class="empty">Aucun produit trouvé.</div>`;
+    }
+
+    function addToCart(id) {
+      const p = products.find(x => x.id === id);
+      const item = cart.find(x => x.id === id);
+
+      if (item) {
+        item.qty++;
+      } else {
+        cart.push({
+          id: p.id,
+          name: p.name,
+          price: p.price,
+          qty: 1,
+          savory: p.savory
+        });
+      }
+
+      save();
+      updateCount();
+      toast(p.name + " ajouté");
+    }
+
+    function changeQty(id, delta) {
+      const item = cart.find(x => x.id === id);
+      if (!item) return;
+
+      item.qty += delta;
+
+      if (item.qty <= 0) {
+        cart = cart.filter(x => x.id !== id);
+      }
+
+      save();
+      updateCount();
+      renderCart();
+    }
+
+    function total() {
+      return cart.reduce((sum, i) => sum + i.price * i.qty, 0);
+    }
+
+    function updateCount() {
+      document.getElementById("cartCount").textContent =
+        cart.reduce((s, i) => s + i.qty, 0);
+    }
+
+    function hasSavoryCrepe() {
+      return cart.some(item => item.savory);
+    }
+
+    function renderCart() {
+      const box = document.getElementById("cartItems");
+      const form = document.getElementById("orderForm");
+      const saucesBlock = document.getElementById("saucesBlock");
+
+      if (!cart.length) {
+        box.innerHTML = `<div class="empty">Panier vide.</div>`;
+        form.classList.add("hidden");
+        saucesBlock.classList.add("hidden");
+        return;
+      }
+
+      form.classList.remove("hidden");
+      saucesBlock.classList.toggle("hidden", !hasSavoryCrepe());
+
+      box.innerHTML = `
+        <div class="cart-card">
+          ${cart.map(i => `
+            <div class="cart-line">
+              <div>
+                <strong>${i.name}</strong><br>
+                <span style="color: var(--muted);">${money(i.price)} x ${i.qty}</span>
+              </div>
+
+              <div class="qty">
+                <button onclick="changeQty('${i.id}', -1)">−</button>
+                <strong>${i.qty}</strong>
+                <button onclick="changeQty('${i.id}', 1)">+</button>
+              </div>
+
+              <strong>${money(i.price * i.qty)}</strong>
+            </div>
+          `).join("")}
+
+          <div class="summary">
+            <div class="summary-row">
+              <span>Articles</span>
+              <strong>${cart.reduce((s, i) => s + i.qty, 0)}</strong>
+            </div>
+
+            <div class="summary-row">
+              <span>Paiement</span>
+              <strong>Sur place</strong>
+            </div>
+
+            <div class="summary-row total">
+              <span>Total</span>
+              <strong>${money(total())}</strong>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.getElementById("orderForm").addEventListener("submit", e => {
+      e.preventDefault();
+
+      const name = document.getElementById("clientName").value.trim();
+
+      if (!name) return toast("Ajoute le nom du client");
+      if (!cart.length) return toast("Panier vide");
+
+      let sauces = [];
+
+      if (hasSavoryCrepe()) {
+        sauces = [...document.querySelectorAll(".checks input:checked")].map(i => i.value);
+      }
+
+      ordersData.unshift({
+        id: Date.now(),
+        number: ordersData.length + 1,
+        date: new Date().toLocaleString("fr-FR"),
+        name,
+        phone: document.getElementById("clientPhone").value.trim(),
+        note: document.getElementById("note").value.trim(),
+        sauces,
+        items: cart.map(i => ({ ...i })),
+        total: total(),
+        status: "À préparer"
+      });
+
+      cart = [];
+
+      save();
+      updateCount();
+      e.target.reset();
+      renderCart();
+      showPage("thanks");
+    });
+
+    function unlockAdmin() {
+      if (document.getElementById("adminCode").value.trim() !== ADMIN_PIN) {
+        return toast("Code incorrect");
+      }
+
+      adminUnlocked = true;
+      sessionStorage.setItem("lerisfood_admin", "yes");
+      renderAdmin();
+    }
+
+    function lockAdmin() {
+      adminUnlocked = false;
+      sessionStorage.removeItem("lerisfood_admin");
+      renderAdmin();
+    }
+
+    function renderAdmin() {
+      document.getElementById("loginBox").classList.toggle("hidden", adminUnlocked);
+      document.getElementById("adminPanel").classList.toggle("hidden", !adminUnlocked);
+
+      if (!adminUnlocked) return;
+
+      const target = document.getElementById("orders");
+
+      if (!ordersData.length) {
+        target.innerHTML = `<div class="empty">Aucune commande.</div>`;
+        return;
+      }
+
+      target.innerHTML = ordersData.map(o => `
+        <article class="order">
+          <div class="order-top">
+            <div>
+              <strong>Commande #${o.number}</strong><br>
+              <small style="color: var(--muted);">${o.date}</small><br>
+              <span>${o.name}${o.phone ? " • " + o.phone : ""}</span>
+            </div>
+
+            <span class="status ${o.status === "Prêt" ? "ready" : o.status === "Terminé" ? "done" : ""}">
+              ${o.status}
+            </span>
+          </div>
+
+          <div style="line-height: 1.6;">
+            ${o.items.map(i => `${i.qty}x ${i.name} — ${money(i.price * i.qty)}`).join("<br>")}
+            <br><strong>Total : ${money(o.total)}</strong>
+            ${o.sauces && o.sauces.length ? `<br>🌶️ Sauces : ${o.sauces.join(", ")}` : ""}
+            ${o.note ? `<br>📝 Note : ${o.note}` : ""}
+          </div>
+
+          <div class="order-actions">
+            <button onclick="setStatus(${o.id}, 'À préparer')">À préparer</button>
+            <button class="btn-green" onclick="setStatus(${o.id}, 'Prêt')">Prêt</button>
+            <button class="btn-dark" onclick="setStatus(${o.id}, 'Terminé')">Terminé</button>
+            <button class="btn-red" onclick="deleteOrder(${o.id})">Supprimer</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function setStatus(id, status) {
+      const order = ordersData.find(x => x.id === id);
+
+      if (order) {
+        order.status = status;
+        save();
+        renderAdmin();
+      }
+    }
+
+    function deleteOrder(id) {
+      if (confirm("Supprimer cette commande ?")) {
+        ordersData = ordersData.filter(x => x.id !== id);
+        save();
+        renderAdmin();
+      }
+    }
+
+    function clearOrders() {
+      if (confirm("Effacer toutes les commandes ?")) {
+        ordersData = [];
+        save();
+        renderAdmin();
+      }
+    }
+
+    function exportOrders() {
+      if (!ordersData.length) return toast("Aucune commande à exporter");
+
+      const rows = [
+        ["Numero", "Date", "Client", "Telephone", "Produits", "Sauces", "Note", "Total", "Statut"]
+      ];
+
+      ordersData.forEach(o => {
+        rows.push([
+          o.number,
+          o.date,
+          o.name,
+          o.phone || "",
+          o.items.map(i => `${i.qty}x ${i.name}`).join(" | "),
+          (o.sauces || []).join(", "),
+          o.note || "",
+          money(o.total),
+          o.status
+        ]);
+      });
+
+      const csv = rows
+        .map(r => r.map(v => `"${String(v).replaceAll('"', '""')}"`).join(";"))
+        .join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+
+      a.href = url;
+      a.download = "commandes_lerisfood.csv";
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+    renderProducts();
+    renderCart();
+    renderAdmin();
+    updateCount();
+    updateNav("home");
+  </script>
 </body>
 </html>
