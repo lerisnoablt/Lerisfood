@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#ff7a18" />
+  <title>Lerisfood — Commande en ligne</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#accueil" data-route="accueil">
+      <span class="logo">🍽️</span>
+      <span>Lerisfood</span>
+    </a>
+
+    <nav class="nav">
+      <a href="#accueil" data-route="accueil">Accueil</a>
+      <a href="#menu" data-route="menu">Menu</a>
+      <a href="#panier" data-route="panier">Panier</a>
+      <a href="#admin" data-route="admin">Admin</a>
+    </nav>
+
+    <button class="cart-btn" onclick="goTo('panier')">
+      🛒 <span id="cartCount">0</span>
+    </button>
+  </header>
+
+  <main class="container">
+    <section id="page-accueil" class="page active">
+      <div class="hero">
+        <div class="hero-text">
+          <span class="tag">🔥 Commande rapide • Paiement sur place</span>
+          <h1>Ton menu gourmand en un scan.</h1>
+          <p>
+            Milkshakes, caipiriñas et crêpes. Le client choisit, valide son panier,
+            puis la commande s’affiche dans ton espace admin.
+          </p>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="goTo('menu')">Voir le menu</button>
+            <button class="btn btn-dark" onclick="goTo('admin')">Voir les commandes</button>
+          </div>
+        </div>
+
+        <div class="hero-preview">
+          <div class="phone">
+            <div class="phone-head">
+              <strong>Lerisfood</strong>
+              <span>🛒</span>
+            </div>
+            <div class="mini-product"><span>🥤</span><div><strong>Milkshake Oreo</strong><small>Crémeux et gourmand</small></div></div>
+            <div class="mini-product"><span>🥞</span><div><strong>Crêpe Nutella</strong><small>Classique sucré</small></div></div>
+            <div class="mini-product"><span>🍹</span><div><strong>Caipiriña Maracujá</strong><small>Frais et tropical</small></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Comment ça marche ?</h2>
+        <p>Simple pour le client, pratique pour toi.</p>
+      </div>
+
+      <div class="steps">
+        <article>
+          <span>📲</span>
+          <h3>1. Le client scanne</h3>
+          <p>Il ouvre ton site GitHub Pages avec un lien ou un QR code.</p>
+        </article>
+        <article>
+          <span>🛒</span>
+          <h3>2. Il commande</h3>
+          <p>Il ajoute ses produits, choisit ses sauces et valide.</p>
+        </article>
+        <article>
+          <span>👨‍🍳</span>
+          <h3>3. Tu prépares</h3>
+          <p>La commande apparaît dans l’espace admin du navigateur.</p>
+        </article>
+      </div>
+
+      <div class="warning-box">
+        <strong>Important :</strong> cette version GitHub Pages fonctionne sans PHP.
+        Les commandes sont sauvegardées dans le navigateur de l’appareil qui les reçoit.
+        Pour recevoir les commandes de tous les clients sur ton téléphone en temps réel,
+        il faudra ensuite connecter Google Forms, Google Sheets ou Firebase.
+      </div>
+    </section>
+
+    <section id="page-menu" class="page">
+      <div class="section-title">
+        <h2>Menu Lerisfood</h2>
+        <p>Recherche, filtre, ajoute au panier et valide ta commande.</p>
+      </div>
+
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="Rechercher : Oreo, Nutella, citron..." />
+        <select id="categoryFilter">
+          <option value="all">Toutes les catégories</option>
+          <option value="Milkshakes">Milkshakes</option>
+          <option value="Caipiriñas">Caipiriñas</option>
+          <option value="Crêpes">Crêpes</option>
+        </select>
+        <select id="sortFilter">
+          <option value="default">Tri normal</option>
+          <option value="priceAsc">Prix croissant</option>
+          <option value="priceDesc">Prix décroissant</option>
+          <option value="name">Nom A-Z</option>
+        </select>
+      </div>
+
+      <div class="chips">
+        <button class="chip active" onclick="setCategory('all', this)">Tout</button>
+        <button class="chip" onclick="setCategory('Milkshakes', this)">🥤 Milkshakes</button>
+        <button class="chip" onclick="setCategory('Caipiriñas', this)">🍹 Caipiriñas</button>
+        <button class="chip" onclick="setCategory('Crêpes', this)">🥞 Crêpes</button>
+      </div>
+
+      <div id="productsGrid" class="products-grid"></div>
+    </section>
+
+    <section id="page-panier" class="page">
+      <div class="section-title">
+        <h2>Ton panier</h2>
+        <p>Vérifie la commande avant validation.</p>
+      </div>
+
+      <div id="cartContainer"></div>
+
+      <form id="checkoutForm" class="checkout">
+        <h3>Finaliser la commande</h3>
+
+        <label>Nom du client *</label>
+        <input id="clientName" required placeholder="Ex : Lerisno" />
+
+        <label>Téléphone, optionnel</label>
+        <input id="clientPhone" placeholder="Ex : 0694 00 00 00" />
+
+        <label>Sauces</label>
+        <div class="checks">
+          <label><input type="checkbox" value="Algérienne" /> Algérienne</label>
+          <label><input type="checkbox" value="Ketchup" /> Ketchup</label>
+          <label><input type="checkbox" value="Samouraï" /> Samouraï</label>
+        </div>
+
+        <label>Note</label>
+        <textarea id="clientNote" placeholder="Ex : sans glaçons, sauce à part, bien chaud..."></textarea>
+
+        <button class="btn btn-primary" type="submit">Valider la commande</button>
+      </form>
+    </section>
+
+    <section id="page-admin" class="page">
+      <div class="section-title">
+        <h2>Espace admin</h2>
+        <p>Code admin : <strong>1234</strong>. Ici tu peux gérer les commandes sauvegardées sur cet appareil.</p>
+      </div>
+
+      <div id="adminLogin" class="admin-login">
+        <label>Code admin</label>
+        <input id="adminCode" type="password" placeholder="Entre le code" />
+        <button class="btn btn-dark" onclick="unlockAdmin()">Entrer</button>
+      </div>
+
+      <div id="adminPanel" class="hidden">
+        <div class="admin-actions">
+          <button class="btn btn-outline" onclick="exportOrders()">Exporter CSV</button>
+          <button class="btn btn-danger" onclick="clearOrders()">Effacer tout</button>
+          <button class="btn btn-dark" onclick="lockAdmin()">Verrouiller</button>
+        </div>
+        <div id="ordersList"></div>
+      </div>
+    </section>
+
+    <section id="page-merci" class="page">
+      <div class="thanks">
+        <span>✅</span>
+        <h2>Commande validée !</h2>
+        <p>Merci. Paiement sur place au comptoir.</p>
+        <button class="btn btn-primary" onclick="goTo('menu')">Nouvelle commande</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="toast" class="toast">Produit ajouté</div>
+
+  <script src="assets/app.js"></script>
+</body>
+</html>
